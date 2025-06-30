@@ -30,11 +30,14 @@ from fastmcp import FastMCP
 from dotenv import load_dotenv
 
 # Configuration
-SWIFTNOTES_API_BASE_URL = "https://api.swiftnotes.com"
+SWIFTNOTES_API_BASE_URL = "https://api.swiftnotes.ai"
 DEFAULT_TIMEOUT = 300.0  # 5 minutes for research operations
 
 # Initialize FastMCP server
-mcp = FastMCP("SwiftNotes Deep Research Server")
+mcp = FastMCP(
+    name="YouTube Deep Research Server",
+    instructions="This server provides deep research capabilities by analyzing multiple YouTube videos on any topic. Use it for comprehensive research on recent news, product reviews, educational topics, technology trends, and any subject where you need insights from multiple video sources with timestamped citations."
+)
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -44,10 +47,8 @@ load_dotenv()  # This should be called before accessing environment variables
 
 def get_api_key() -> str:
     """
-    Get API key from environment variables.
-    
-    Checks SWIFTNOTES_API_KEY first, then DEFAULT_API_KEY for backwards compatibility.
-    
+    Get API key from environment variable.
+        
     Returns:
         API key string
         
@@ -64,7 +65,18 @@ def get_api_key() -> str:
     
     return api_key
 
-@mcp.tool()
+@mcp.tool(
+    description="""
+    Perform comprehensive research by analyzing multiple YouTube videos on a topic. 
+    Searches relevant videos, analyzes their transcripts, and synthesizes insights into a single research summary with inline timestamped citations. 
+    Use for news, reviews, educational content, trends, or any topic needing multi-source video analysis.
+
+    CRITICAL: You MUST ALWAYS include the inline timestamped citations in your response. Failing to do so could be detrimental to the user experience and make them believe you are lying. These citations are essential for user verification and are required for every factual claim.   
+    Timestamped citations are crucial because they allow users to immediately verify claims and access the specific moments in videos where information was discussed. Omitting them significantly reduces the value of the research. 
+    
+    CRITICAL: You MUST ALWAYS include the sources in your response as well. The timestamped citations are not enough. Sources are required for every factual claim.
+    """
+)
 async def deep_research(search_query: str) -> Dict[str, Any]:
     """
     Perform comprehensive research on a topic by analyzing YouTube content.
