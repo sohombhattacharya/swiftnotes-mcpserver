@@ -22,4 +22,4 @@ To install swiftnotes-mcpserver for Claude Desktop automatically via [Smithery](
 npx -y @smithery/cli install @sohombhattacharya/swiftnotes-mcpserver --client claude
 ```
 
-Visit <a href="https://swiftnotes.ai/" target="_blank" rel="noopener noreferrer">swiftnotes.ai</a> to create a free account and get started with a free API key!
+Visit [swiftnotes.ai](https://swiftnotes.ai/) to create a free account and get started with a free API key!
